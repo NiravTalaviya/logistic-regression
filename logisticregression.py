@@ -21,7 +21,7 @@ sex = numpy.asarray(Sex,dtype=int)
 sibsp = numpy.asarray(SibSp,dtype=int)
 survived = numpy.asarray(rescue,dtype=int)
 theta1, theta2, theta3, theta4 = 0, 0, 0, 0
-learning_rate, iterations = 1, 100
+learning_rate, iterations = 1, 1000
 len = pclass.size
 for i in range(iterations):
     ans1, ans2, ans3, ans4 = 0, 0, 0, 0
@@ -36,9 +36,18 @@ for i in range(iterations):
     theta3 -= (learning_rate / len) * ans3
     theta4 -= (learning_rate / len) * ans4
 i = 0
-with open('titanictrain.csv') as csvfile:
+g = []
+k = 0
+with open('titanicgender_submission_eample.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for inputdata in reader:
+        g.append(inputdata['Survived']);
+        
+g = numpy.asarray(g,dtype=int)
+with open('titanictest.csv') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for inputdata in reader:
+        k+=1
         if inputdata['Sex'] == 'female':
             gender = 0
         else:
@@ -51,6 +60,7 @@ with open('titanictrain.csv') as csvfile:
             x = 1
         else:
             x = 0
-        if x != (int)(inputdata['Survived']):
+        if x != g[k-1]:
             i += 1
 print(i)
+print(k)
